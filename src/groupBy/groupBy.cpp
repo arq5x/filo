@@ -1,9 +1,8 @@
 /*****************************************************************************
   groupBy.cpp
 
-  (c) 2009 - Aaron Quinlan
-  Hall Laboratory
-  Department of Biochemistry and Molecular Genetics
+  (c) 2009, 2010 - Aaron Quinlan
+  Center for Public Health Genomics
   University of Virginia
   aaronquinlan@gmail.com
 

@@ -14,7 +14,8 @@ export LIBS		= -lz
 
 
 
-SUBDIRS = $(SRC_DIR)/groupBy 
+SUBDIRS = $(SRC_DIR)/groupBy \
+          $(SRC_DIR)/shuffle \
 
 UTIL_SUBDIRS =	$(SRC_DIR)/common/tabFile \
 				$(SRC_DIR)/common/gzstream \

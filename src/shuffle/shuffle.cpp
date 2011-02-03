@@ -3,7 +3,7 @@
 #include <vector>
 #include <algorithm>
 #include <math.h>
-
+#include <unistd.h> // for 
 using namespace std;
 
 // define our program name
@@ -24,7 +24,7 @@ int main(int argc, char* argv[]) {
 	bool isFile = false;
 	
 	bool useSeed = false;
-	int	seed;
+    int	seed = 0;
 	
 	for(int i = 1; i < argc; i++) {
 		int parameterLength = (int)strlen(argv[i]);
@@ -64,61 +64,46 @@ int main(int argc, char* argv[]) {
 	long totalLines = 0;
 	
 	vector<string> linesVector;
-
+    linesVector.reserve(1E6);   // allocate 1 mill lines of input.
+    istream *in = &cin;
+    
 	if (isFile) {
-		ifstream inF(inFile.c_str(), ios::in);
-	
+		ifstream *inF = new ifstream(inFile.c_str(), ios::in);
 		// ensure that the file can be opened
 		if ( !inF ) {
 			cerr << "Error: The requested input file (" << inFile << ") could not be opened.  Exiting!" << endl;
 			exit (1);
 		}
-		while (getline(inF,line)) {
-			if(line.empty()) continue;		
-			
-			// increment the count of lines processed
-			totalLines++;
-
-			// add the line to the vector and map
-			linesVector.push_back(line);
+		else {
+            in = inF;
 		}
 	}
-	else {
-		while (getline(cin,line)) {
+	
+	// 1. Read and store all the lines of the file.
+	while (getline(*in,line)) {
+	    // skip if just whitespace.
+		if(line.empty()) continue;		
+		// increment the count of lines processed
+		totalLines++;
+		// add the line to the vector and map
+		linesVector.push_back(line);
+	}
+	
+	// 2. Shuffle the input.	
+	// if no seed supplied, use time and the current priocess id
+	if (!useSeed) 
+	    srand((unsigned)time(0)+(unsigned)getpid());
+	else
+	    srand(seed); 
+	    
+	// now shuffle the input:
+	random_shuffle (linesVector.begin(), linesVector.end());
 		
-			if(line.empty()) continue;		
-			
-			// increment the count of lines processed
-			totalLines++;
-
-			// add the line to the vector and map
-			linesVector.push_back(line);
-		}
-	}
-	
-	
-	//####################################
-	// report the results
-	//####################################
-	
-	// seed the random sorting with a user-specified seed
-	if (useSeed) {
-		// seed the shuffling with the user-specified seed.
-		srand(seed);
-		random_shuffle (linesVector.begin(), linesVector.end());		
-	}
-	// seed the random sorting with the current system time.
-	else {
-		srand(time(0));
-		// using built-in random generator:
-		random_shuffle (linesVector.begin(), linesVector.end());
-	}	
-	
-	// write the shuffled data to stdout
+	// 3. Write the shuffled data to stdout
 	for(vector<string>::const_iterator iter = linesVector.begin(); iter != linesVector.end(); ++iter) {
-		cout << *iter << endl;
+        printf("%s\n", (*iter).c_str());
+		//cout << *iter << endl;
 	}
-	
 	// exit nicely
 	return 0;
 }
