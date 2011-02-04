@@ -1,12 +1,12 @@
 /*****************************************************************************
-  groupBy.cpp
+groupBy.cpp
 
-  (c) 2009, 2010 - Aaron Quinlan
-  Center for Public Health Genomics
-  University of Virginia
-  aaronquinlan@gmail.com
+(c) 2009, 2010 - Aaron Quinlan
+Center for Public Health Genomics
+University of Virginia
+aaronquinlan@gmail.com
 
-  Licenced under the GNU General Public License 2.0 license.
+Licenced under the GNU General Public License 2.0 license.
 ******************************************************************************/
 #include <vector>
 #include <map>
@@ -42,7 +42,7 @@ const int PRECISION = 21;
 struct ValueGreaterThan
 {
     bool operator()( const vector< pair<int, string> >::value_type& lhs,
-                     const vector< pair<int, string> >::value_type& rhs ) const
+        const vector< pair<int, string> >::value_type& rhs ) const
     {
         return lhs.first > rhs.first;
     }
@@ -51,7 +51,7 @@ struct ValueGreaterThan
 struct ValueLessThan
 {
     bool operator()( const vector< pair<int, string> >::value_type& lhs,
-                     const vector< pair<int, string> >::value_type& rhs ) const
+        const vector< pair<int, string> >::value_type& rhs ) const
     {
         return lhs.first < rhs.first;
     }
@@ -68,7 +68,7 @@ double ToDouble(const string &element);
 void TabPrintPost (string element);
 void TabPrintPre (string element);
 void CommaPrint (string element);
-            
+
 int main(int argc, char* argv[]) {
 
     // input files
@@ -76,23 +76,23 @@ int main(int argc, char* argv[]) {
     string groupColumnsString = "1,2,3";
     string opsColumnString;
     string opsString;
-    
+
     // our configuration variables
     bool showHelp          = false;
-    bool haveOpColumns     = false; 
-    bool haveOps           = true;  
+    bool haveOpColumns     = false;
+    bool haveOps           = true;
     bool printOriginalLine = false;
     bool printHeaderLine   = false;
     bool InputHaveHeaderLine = false;
-    bool ignoreCase	   = false;
-    
+    bool ignoreCase    = false;
+
     // check to see if we should print out some help
     if(argc <= 1) showHelp = true;
 
     for(int i = 1; i < argc; i++) {
         int parameterLength = (int)strlen(argv[i]);
 
-        if((PARAMETER_CHECK("-h", 2, parameterLength)) || 
+        if((PARAMETER_CHECK("-h", 2, parameterLength)) ||
         (PARAMETER_CHECK("--help", 5, parameterLength))) {
             showHelp = true;
         }
@@ -110,67 +110,67 @@ int main(int argc, char* argv[]) {
                 cerr << endl << "*****ERROR: -i parameter requires a value." << endl << endl;
                 ShowHelp();
                 break;
-            } 
+            }
             else {
-         	    inFile     = argv[i + 1];
-         	    i++;
+                inFile     = argv[i + 1];
+                i++;
             }
         }
         else if (PARAMETER_CHECK("-grp", 4, parameterLength) || PARAMETER_CHECK("-g", 2, parameterLength)) {
-			if ((i+1) >= argc || LOOKS_LIKE_A_PARAM(argv[i+1])) {
-				cerr << endl << "*****ERROR: -grp parameter requires a value." << endl << endl;
-                ShowHelp();
-				break;
-			} 
-			else {
-				groupColumnsString     = argv[i + 1];
-				i++;			
-			}     
-        }
-        else if(PARAMETER_CHECK("-opCols", 7, parameterLength) || PARAMETER_CHECK("-c", 2, parameterLength)) {
-			if ((i+1) >= argc || LOOKS_LIKE_A_PARAM(argv[i+1])) {
-				cerr << endl << "*****ERROR: -opCols parameter requires a value." << endl << endl;
-                ShowHelp();
-				break;
-			} 
-			else {
-				haveOpColumns       = true;
-				opsColumnString     = argv[i + 1];
-				i++;			
-			}           
-        }
-        else if(PARAMETER_CHECK("-ops", 4, parameterLength) || PARAMETER_CHECK("-o", 2, parameterLength)) {
-			if ((i+1) >= argc || LOOKS_LIKE_A_PARAM(argv[i+1])) {
-				cerr << endl << "*****ERROR: -ops parameter requires a value." << endl << endl;
+            if ((i+1) >= argc || LOOKS_LIKE_A_PARAM(argv[i+1])) {
+                cerr << endl << "*****ERROR: -grp parameter requires a value." << endl << endl;
                 ShowHelp();
                 break;
-			} 
-			else {
-				haveOps    = true;
-				opsString  = argv[i + 1];
-				i++;			
-			}          
+            }
+            else {
+                groupColumnsString     = argv[i + 1];
+                i++;
+            }
         }
-	else if(PARAMETER_CHECK("-full", 5, parameterLength)) {
-		printOriginalLine = true;
+        else if(PARAMETER_CHECK("-opCols", 7, parameterLength) || PARAMETER_CHECK("-c", 2, parameterLength)) {
+            if ((i+1) >= argc || LOOKS_LIKE_A_PARAM(argv[i+1])) {
+                cerr << endl << "*****ERROR: -opCols parameter requires a value." << endl << endl;
+                ShowHelp();
+                break;
+            }
+            else {
+                haveOpColumns       = true;
+                opsColumnString     = argv[i + 1];
+                i++;
+            }
         }
-	else if(PARAMETER_CHECK("-outheader", 10, parameterLength)) {
-		printHeaderLine = true;
+        else if(PARAMETER_CHECK("-ops", 4, parameterLength) || PARAMETER_CHECK("-o", 2, parameterLength)) {
+            if ((i+1) >= argc || LOOKS_LIKE_A_PARAM(argv[i+1])) {
+                cerr << endl << "*****ERROR: -ops parameter requires a value." << endl << endl;
+                ShowHelp();
+                break;
+            }
+            else {
+                haveOps    = true;
+                opsString  = argv[i + 1];
+                i++;
+            }
         }
-	else if(PARAMETER_CHECK("-inheader", 9, parameterLength)) {
-		InputHaveHeaderLine = true;
+        else if(PARAMETER_CHECK("-full", 5, parameterLength)) {
+            printOriginalLine = true;
         }
-	else if(PARAMETER_CHECK("-header", 7, parameterLength)) {
-		InputHaveHeaderLine = true;
-		printHeaderLine = true;
+        else if(PARAMETER_CHECK("-outheader", 10, parameterLength)) {
+            printHeaderLine = true;
         }
-	else if(PARAMETER_CHECK("-ignorecase", 11, parameterLength)) {
-		ignoreCase = true;
+        else if(PARAMETER_CHECK("-inheader", 9, parameterLength)) {
+            InputHaveHeaderLine = true;
+        }
+        else if(PARAMETER_CHECK("-header", 7, parameterLength)) {
+            InputHaveHeaderLine = true;
+            printHeaderLine = true;
+        }
+        else if(PARAMETER_CHECK("-ignorecase", 11, parameterLength)) {
+            ignoreCase = true;
         }
         else {
             cerr << endl << "*****ERROR: Unrecognized parameter: " << argv[i] << " *****" << endl << endl;
             showHelp = true;
-        }       
+        }
     }
 
     if (!haveOpColumns) {
@@ -185,48 +185,48 @@ int main(int argc, char* argv[]) {
         if ((ops[i] != "sum")  && (ops[i] != "max")    && (ops[i] != "min") && (ops[i] != "mean") &&
             (ops[i] != "mode") && (ops[i] != "median") && (ops[i] != "antimode") && (ops[i] != "stdev") &&
             (ops[i] != "sstdev") && (ops[i] != "count") && (ops[i] != "collapse") && (ops[i] != "freqdesc") &&
-            (ops[i] != "freqasc")) {
-            cerr << endl << "*****" << endl << "*****ERROR: Invalid operation selection \"" << ops[i] << endl << "\"  *****" << endl;  
-            showHelp = true;                            
+        (ops[i] != "freqasc")) {
+            cerr << endl << "*****" << endl << "*****ERROR: Invalid operation selection \"" << ops[i] << endl << "\"  *****" << endl;
+            showHelp = true;
         }
     }
     if (!showHelp) {
-        
+
         // Split the column string sent by the user into discrete column numbers
         // A comma separated string is expected.
         vector<int> groupColumnsInt;
         Tokenize(groupColumnsString, groupColumnsInt, ",");
-        
+
         vector<int> opColumnsInt;
         Tokenize(opsColumnString, opColumnsInt, ",");
-        
-        // sanity check the group columns        
+
+        // sanity check the group columns
         for(size_t i = 0; i < groupColumnsInt.size(); ++i) {
             int groupColumnInt = groupColumnsInt[i];
             if (groupColumnInt < 1) {
-                cerr << endl << "*****" << endl << "*****ERROR: group columns must be >=1. " << endl << "*****" << endl;    
-                ShowHelp();                
+                cerr << endl << "*****" << endl << "*****ERROR: group columns must be >=1. " << endl << "*****" << endl;
+                ShowHelp();
             }
         }
-        
-        // sanity check the op columns        
+
+        // sanity check the op columns
         for(size_t i = 0; i < opColumnsInt.size(); ++i) {
             int opColumnInt = opColumnsInt[i];
             if (opColumnInt < 1) {
-                cerr << endl << "*****" << endl << "*****ERROR: op columns must be >=1. " << endl << "*****" << endl;   
-                ShowHelp();                
+                cerr << endl << "*****" << endl << "*****ERROR: op columns must be >=1. " << endl << "*****" << endl;
+                ShowHelp();
             }
         }
-        
+
         // sanity check that there are equal number of opColumns and ops
         if (ops.size() != opColumnsInt.size()) {
-            cerr << endl << "*****" << endl << "*****ERROR: There must be equal number of ops and opCols. " << endl << "*****" << endl; 
-            ShowHelp();                
+            cerr << endl << "*****" << endl << "*****ERROR: There must be equal number of ops and opCols. " << endl << "*****" << endl;
+            ShowHelp();
         }
         GroupBy(inFile, groupColumnsInt, opColumnsInt, ops,
-			printOriginalLine, printHeaderLine, InputHaveHeaderLine,
-			ignoreCase);
-    }   
+            printOriginalLine, printHeaderLine, InputHaveHeaderLine,
+            ignoreCase);
+    }
     else {
         ShowHelp();
     }
@@ -235,23 +235,23 @@ int main(int argc, char* argv[]) {
 void ShowHelp(void) {
 
     cerr << endl << "Program: " << PROGRAM_NAME << " (v" << VERSION << ")" << endl;
-    
+
     cerr << "Authors: Aaron Quinlan (aaronquinlan@gmail.com)" << endl;
     cerr << "         Assaf Gordon" << endl;
 
     cerr << "Summary: Summarizes a dataset column based upon" << endl;
     cerr << "\t common column groupings. Akin to the SQL \"group by\" command." << endl << endl;
-    
+
     cerr << "Usage:\t " << PROGRAM_NAME << " -i [FILE] -g [group_column(s)] -c [op_column(s)] -o [ops] " << endl;
     cerr << "\t "     << "cat [FILE] | " << PROGRAM_NAME << " -g [group_column(s)] -c [op_column(s)] -o [ops] " << endl << endl;
 
 
     cerr << "Options: " << endl;
     cerr << "\t-i\t\t"        << "Input file. Assumes \"stdin\" if omitted." << endl << endl;
-    
+
     cerr << "\t-g -grp\t\t"      << "Specify the columns (1-based) for the grouping." << endl;
     cerr                         << "\t\t\tThe columns must be comma separated." << endl;
-    cerr                         << "\t\t\t- Default: 1,2,3" << endl << endl;  
+    cerr                         << "\t\t\t- Default: 1,2,3" << endl << endl;
 
     cerr << "\t-c -opCols\t"   << "Specify the column (1-based) that should be summarized." << endl;
     cerr                         << "\t\t\t- Required." << endl << endl;
@@ -260,26 +260,26 @@ void ShowHelp(void) {
     cerr                         << "\t\t\tValid operations:" << endl;
     cerr                         << "\t\t\t    sum, count, min, max," << endl;
     cerr                         << "\t\t\t    mean, median, mode, antimode," << endl;
-    cerr                         << "\t\t\t    stdev, sstdev (sample standard dev.)," << endl;    
+    cerr                         << "\t\t\t    stdev, sstdev (sample standard dev.)," << endl;
     cerr                         << "\t\t\t    collapse (i.e., print a comma separated list), " << endl;
     cerr                         << "\t\t\t    freqdesc (i.e., print desc. list of values:freq)" << endl;
     cerr                         << "\t\t\t    freqasc (i.e., print asc. list of values:freq)" << endl;
     cerr                         << "\t\t\t- Default: sum" << endl << endl;
 
-    cerr << "\t-full\t\t"	<< "Print all columns from input file." << endl;
-    cerr			<< "\t\t\tDefault: print only grouped columns." << endl << endl;
+    cerr << "\t-full\t\t"   << "Print all columns from input file." << endl;
+    cerr            << "\t\t\tDefault: print only grouped columns." << endl << endl;
 
-    cerr << "\t-inheader\t"	<< "Input file has a header line - the first line will be ignored." << endl << endl ;
+    cerr << "\t-inheader\t" << "Input file has a header line - the first line will be ignored." << endl << endl ;
 
-    cerr << "\t-outheader\t"	<< "Print header line in the output, detailing the column names. " << endl;
-    cerr			<< "\t\t\tIf the input file has headers (-inheader), the output file" << endl;
-    cerr			<< "\t\t\twill use the input's column names." << endl;
-    cerr			<< "\t\t\tIf the input file has no headers, the output file" << endl;
-    cerr			<< "\t\t\twill use \"col_1\", \"col_2\", etc. as the column names." << endl << endl;
+    cerr << "\t-outheader\t"    << "Print header line in the output, detailing the column names. " << endl;
+    cerr            << "\t\t\tIf the input file has headers (-inheader), the output file" << endl;
+    cerr            << "\t\t\twill use the input's column names." << endl;
+    cerr            << "\t\t\tIf the input file has no headers, the output file" << endl;
+    cerr            << "\t\t\twill use \"col_1\", \"col_2\", etc. as the column names." << endl << endl;
 
-    cerr << "\t-header\t\t"	<< "same as '-inheader -outheader'" << endl << endl;
+    cerr << "\t-header\t\t" << "same as '-inheader -outheader'" << endl << endl;
 
-    cerr << "\t-ignorecase\t"	<< "Group values regardless of upper/lower case." << endl << endl;
+    cerr << "\t-ignorecase\t"   << "Group values regardless of upper/lower case." << endl << endl;
 
     cerr << "Examples: " << endl;
     cerr << "\t$ cat ex1.out" << endl;
@@ -293,75 +293,74 @@ void ShowHelp(void) {
     cerr << "\tchr1 10  20  A   B.1,B.2,    5500" << endl << endl;
     cerr << "\t$ cat ex1.out | groupBy -g 1,2,3,4 -c 8,9 -o collapse,mean" << endl;
     cerr << "\tchr1 10  20  A   B.1,B.2,    5500" << endl << endl;
-    
+
     cerr << "Notes: " << endl;
     cerr << "\t(1)  The input file/stream should be sorted/grouped by the -grp. columns" << endl;
     cerr << "\t(2)  If -i is unspecified, input is assumed to come from stdin." << endl << endl;
 
-    
+
     // end the program here
     exit(1);
 
 }
 
 
-void GroupBy (const string &inFile, 
-            const vector<int> &groupColumns, 
-            const vector<int> &opColumns, 
-            const vector<string> &ops,
-	    const bool printOriginalLine,
-	    const bool printHeaderLine,
-	    const bool InputHaveHeaderLine,
-	    const bool ignoreCase) {
-    
+void GroupBy (const string &inFile,
+    const vector<int> &groupColumns,
+    const vector<int> &opColumns,
+    const vector<string> &ops,
+    const bool printOriginalLine,
+    const bool printHeaderLine,
+    const bool InputHaveHeaderLine,
+const bool ignoreCase) {
+
     // current line number
     int lineNum = 0;
     // string representing current line
     string inLine;
-    
+
     // vector of strings holding the tokenized current line
     vector<string>  inFields;
     vector<string>  inFieldsFirstLineInGroup;
     inFields.reserve(20);
-    
+
     // keys for the current and previous group
     vector<string>  prevGroup(0);
     vector<string>  currGroup(0);
-    
+
     // vector (one per column) of vector (one per value/column) of the opColumn values for the current group
     vector< vector<string> >  values;
     for( size_t i = 0; i < opColumns.size(); i++ ) {
         values.push_back( vector<string>() );
     }
 
-    bool	first_line = true;
-    
+    bool    first_line = true;
+
     // check the status of the current line
     TabLineStatus tabLineStatus;
-    
+
     // open a new tab file, loop through it line by line
     // and summarize the data for a given group when the group
     // fields change
-    TabFile *_tab = new TabFile(inFile);    
+    TabFile *_tab = new TabFile(inFile);
     _tab->Open();
     while ((tabLineStatus = _tab->GetNextTabLine(inFields, lineNum)) != TAB_INVALID) {
         if (tabLineStatus == TAB_VALID) {
 
-	    if (first_line) {
-		    first_line = false;
+            if (first_line) {
+                first_line = false;
+                if (printHeaderLine)
+                    PrintHeaderLine(inFields, groupColumns, opColumns, ops,
+                    printOriginalLine, InputHaveHeaderLine);
 
-		    if (printHeaderLine)
-			    PrintHeaderLine(inFields, groupColumns, opColumns, ops,
-					    printOriginalLine, InputHaveHeaderLine);
+                if (InputHaveHeaderLine) {
+                    inFields.clear();
+                    continue; // no need to process this line - it's the header
+                }
+            }
 
-		    if (InputHaveHeaderLine) {
-			    inFields.clear();
-			    continue; // no need to process this line - it's the header
-		    }
-	    }
-
-	    if (inFieldsFirstLineInGroup.empty()) //first line in file? - save it
-		    inFieldsFirstLineInGroup = inFields;
+            if (inFieldsFirstLineInGroup.empty()) //first line in file? - save it
+                inFieldsFirstLineInGroup = inFields;
 
             // build the group vector for the current line
             currGroup.clear();
@@ -380,7 +379,7 @@ void GroupBy (const string &inFile,
                     values.push_back( vector<string>() );
                     addValue(inFields, values[i], opColumns[i]-1, lineNum, ignoreCase);
                 }
-		inFieldsFirstLineInGroup = inFields;
+                inFieldsFirstLineInGroup = inFields;
             }
             // we're still dealing with the same group
             else {
@@ -399,16 +398,16 @@ void GroupBy (const string &inFile,
 
 
 void ReportSummary(const vector<string> &group, const vector<vector<string> > &data, const vector<string> &ops) {
-    
+
     vector<string> result;
     for( size_t i = 0; i < data.size(); i++ ) {
-        
+
         string op = ops[i];
         std::stringstream buffer;
         vector<double> dataF;
         // are we doing a numeric conversion?  if so, convert the strings to doubles.
         if ((op == "sum") || (op == "max") || (op == "min") || (op == "mean") ||
-            (op == "median") || (op == "stdev") || (op == "sstdev")) 
+            (op == "median") || (op == "stdev") || (op == "sstdev"))
         {
             transform(data[i].begin(), data[i].end(), back_inserter(dataF), ToDouble);
         }
@@ -423,7 +422,7 @@ void ReportSummary(const vector<string> &group, const vector<vector<string> > &d
             string collapse;
             for( size_t j = 0; j < data[i].size(); j++ ) {//Ugly, but cannot use back_inserter
                 if (j>0)
-			collapse.append(",");
+                    collapse.append(",");
                 collapse.append(data[i][j]);
             }
             result.push_back(collapse);
@@ -464,8 +463,8 @@ void ReportSummary(const vector<string> &group, const vector<vector<string> > &d
             buffer << setprecision (PRECISION) << data[i].size();
             result.push_back(buffer.str());
         }
-        else if ((op == "mode") || (op == "antimode") || 
-                 (op == "freqdesc") || (op == "freqasc")) {
+        else if ((op == "mode") || (op == "antimode") ||
+        (op == "freqdesc") || (op == "freqasc")) {
             // compute the frequency of each unique value
             map<string, int> freqs;
             vector<string>::const_iterator dIt  = data[i].begin();
@@ -473,7 +472,7 @@ void ReportSummary(const vector<string> &group, const vector<vector<string> > &d
             for (; dIt != dEnd; ++dIt) {
                 freqs[*dIt]++;
             }
-            
+
             // grab the mode and the anti mode
             string mode, antiMode;
             int    count = 0;
@@ -498,25 +497,25 @@ void ReportSummary(const vector<string> &group, const vector<vector<string> > &d
                 result.push_back(buffer.str());
             }
             else if (op == "freqdesc" || op == "freqasc") {
-                // pair for the num times a values was 
+                // pair for the num times a values was
                 // observed (1) and the value itself (2)
                 pair<int, string> freqPair;
                 vector< pair<int, string> > freqList;
-                
+
                 // create a list of pairs of all the observed values (second)
                 // and their occurences (first)
                 map<string,int>::const_iterator mapIter = freqs.begin();
-                map<string,int>::const_iterator mapEnd  = freqs.end(); 
+                map<string,int>::const_iterator mapEnd  = freqs.end();
                 for(; mapIter != mapEnd; ++mapIter)
                     freqList.push_back( make_pair(mapIter->second, mapIter->first) );
-                    
+
                 // sort the list of pairs in the requested order by the frequency
                 // this will make the value that was observed least/most bubble to the top
                 if (op == "freqdesc")
                     sort(freqList.begin(), freqList.end(), ValueGreaterThan());
                 else if (op == "freqasc")
                     sort(freqList.begin(), freqList.end(), ValueLessThan());
-                
+
                 // record all of the values and their frequencies.
                 vector< pair<int, string> >::const_iterator iter    = freqList.begin();
                 vector< pair<int, string> >::const_iterator iterEnd = freqList.end();
@@ -558,14 +557,14 @@ void ReportSummary(const vector<string> &group, const vector<vector<string> > &d
 
 void addValue (const vector<string> &fromList, vector<string> &toList, int index, int lineNum, const bool ignoreCase) {
     try {
-	string s(fromList.at(index));
-	if(ignoreCase)
-		transform(s.begin(),s.end(),s.begin(),::tolower);
+        string s(fromList.at(index));
+        if(ignoreCase)
+            transform(s.begin(),s.end(),s.begin(),::tolower);
         toList.push_back(s);
     }
     catch(std::out_of_range& e) {
-        cerr << endl << "*****" << endl << "*****ERROR: requested column exceeds the number of columns in file at line " 
-             << lineNum << ". Exiting." << endl << "*****" << endl; 
+        cerr << endl << "*****" << endl << "*****ERROR: requested column exceeds the number of columns in file at line "
+            << lineNum << ". Exiting." << endl << "*****" << endl;
         exit(1);
     }
 }
@@ -598,44 +597,44 @@ double ToDouble(const string &element) {
 }
 
 inline string ColumnHeaderName(const vector<string> &inFields, const size_t FieldIndex,
-			bool InputHaveHeaderLine)
+    bool InputHaveHeaderLine)
 {
-	stringstream s;
-	if (InputHaveHeaderLine)
-		s << inFields[FieldIndex-1];
-	else
-		s << "col_" << (FieldIndex);
-	return s.str();
+    stringstream s;
+    if (InputHaveHeaderLine)
+        s << inFields[FieldIndex-1];
+    else
+        s << "col_" << (FieldIndex);
+    return s.str();
 }
 
 void PrintHeaderLine(const vector<string> &inFields,
-		const vector<int> &groupColumns,
-		const vector<int> &opColumns,
-		const vector<string> &ops,
-		const bool PrintFullInputLine,
-		const bool InputHaveHeaderLine)
+    const vector<int> &groupColumns,
+    const vector<int> &opColumns,
+    const vector<string> &ops,
+    const bool PrintFullInputLine,
+    const bool InputHaveHeaderLine)
 {
-	vector<string> header;
+    vector<string> header;
 
-	//Header fields of input file
-	if (PrintFullInputLine) {
-		//All input columns
-		for (size_t i=0;i<inFields.size();++i)
-			header.push_back( ColumnHeaderName(inFields, i+1, InputHaveHeaderLine) );
-	} else {
-		//Only the columns that are actually used in the grouped operations
-		for (size_t i=0;i<groupColumns.size();++i)
-			header.push_back( ColumnHeaderName(inFields, groupColumns[i], InputHaveHeaderLine) );
-	}
+    //Header fields of input file
+    if (PrintFullInputLine) {
+        //All input columns
+        for (size_t i=0;i<inFields.size();++i)
+            header.push_back( ColumnHeaderName(inFields, i+1, InputHaveHeaderLine) );
+    } else {
+        //Only the columns that are actually used in the grouped operations
+        for (size_t i=0;i<groupColumns.size();++i)
+            header.push_back( ColumnHeaderName(inFields, groupColumns[i], InputHaveHeaderLine) );
+    }
 
-	//Header fields of output columns, by operation
-	for (size_t i=0; i<opColumns.size();++i) {
-		stringstream s;
-		s << ops[i] << "(" << ColumnHeaderName(inFields, opColumns[i], InputHaveHeaderLine) << ")";
-		header.push_back(s.str());
-	}
+    //Header fields of output columns, by operation
+    for (size_t i=0; i<opColumns.size();++i) {
+        stringstream s;
+        s << ops[i] << "(" << ColumnHeaderName(inFields, opColumns[i], InputHaveHeaderLine) << ")";
+        header.push_back(s.str());
+    }
 
-	//print Header Line
-	for (size_t i=0; i<header.size();++i)
-		cout << header[i] << ((i<header.size()-1)?"\t":"\n");
+    //print Header Line
+    for (size_t i=0; i<header.size();++i)
+        cout << header[i] << ((i<header.size()-1)?"\t":"\n");
 }
