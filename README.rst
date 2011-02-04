@@ -21,6 +21,7 @@ stats
 Test.
 
 ::
+
   $ cat test
   0	1
   1	2
