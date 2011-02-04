@@ -37,7 +37,7 @@ int main(int argc, char* argv[]) {
     int column = 0;
 
     bool doAll      = true;
-    bool doMean     = true;
+    bool doMean     = false;
     bool doGeoMean  = false;
     bool doMode     = false;
     bool doMedian   = false;
