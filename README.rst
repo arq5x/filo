@@ -8,6 +8,11 @@
 filo - Useful FILe and stream Operations
 =========================================
 
+The following tools are available as part of the **filo** package.  More to come...
+
+.. contents::
+
+
 groupBy
 -------
 **groupBy** is a useful tool that mimics the "groupBy" clause in database systems. Given a file or stream that is sorted by the appropriate "grouping columns", **groupBy** will compute summary statistics on another column in the file or stream. This will work with output from all BEDTools as well as any other tab-delimited file or stream.
