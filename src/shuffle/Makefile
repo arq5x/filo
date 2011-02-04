@@ -6,7 +6,7 @@ BIN_DIR = ../../bin/
 # -------------------
 # define our includes
 # -------------------
-INCLUDES = 
+INCLUDES = -I$(UTILITIES_DIR)/version/
 
 # ----------------------------------
 # define our source and object files
@@ -24,5 +24,5 @@ all: $(PROGRAM)
 
 $(PROGRAM):
 	@echo "  * linking $(PROGRAM)"
-	@$(CXX) $(LDFLAGS) $(CXXFLAGS) $(SOURCES) -o $(BIN_DIR)/$@
+	@$(CXX) $(LDFLAGS) $(CXXFLAGS) $(SOURCES) $(INCLUDES) -o $(BIN_DIR)/$@
 

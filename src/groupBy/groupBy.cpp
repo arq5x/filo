@@ -236,16 +236,18 @@ void ShowHelp(void) {
 
     cerr << endl << "Program: " << PROGRAM_NAME << " (v" << VERSION << ")" << endl;
     
-    cerr << "Authors:  Aaron Quinlan (aaronquinlan@gmail.com)" << endl;
-    cerr << "          Assaf Gordon" << endl;
+    cerr << "Authors: Aaron Quinlan (aaronquinlan@gmail.com)" << endl;
+    cerr << "         Assaf Gordon" << endl;
 
     cerr << "Summary: Summarizes a dataset column based upon" << endl;
     cerr << "\t common column groupings. Akin to the SQL \"group by\" command." << endl << endl;
     
-    cerr << "Usage:   " << PROGRAM_NAME << " -i <input> -g <group_column(s)> -c <op_column(s)> -o <ops> " << endl << endl;
+    cerr << "Usage:\t " << PROGRAM_NAME << " -i [FILE] -g [group_column(s)] -c [op_column(s)] -o [ops] " << endl;
+    cerr << "\t "     << "cat [FILE] | " << PROGRAM_NAME << " -g [group_column(s)] -c [op_column(s)] -o [ops] " << endl << endl;
+
 
     cerr << "Options: " << endl;
-    cerr << "\t-i\t\t"        << "Input file. Use \"stdin\" for pipes." << endl << endl;
+    cerr << "\t-i\t\t"        << "Input file. Assumes \"stdin\" if omitted." << endl << endl;
     
     cerr << "\t-g -grp\t\t"      << "Specify the columns (1-based) for the grouping." << endl;
     cerr                         << "\t\t\tThe columns must be comma separated." << endl;
@@ -277,7 +279,7 @@ void ShowHelp(void) {
 
     cerr << "\t-header\t\t"	<< "same as '-inheader -outheader'" << endl << endl;
 
-    cerr << "\t-ignorecase\t"	<< "Group values regardless of upper/lower case." << endl;
+    cerr << "\t-ignorecase\t"	<< "Group values regardless of upper/lower case." << endl << endl;
 
     cerr << "Examples: " << endl;
     cerr << "\t$ cat ex1.out" << endl;
@@ -289,9 +291,11 @@ void ShowHelp(void) {
     cerr << "\tchr1 10  20  A   11000   10000" << endl << endl;
     cerr << "\t$ groupBy -i ex1.out -g 1,2,3,4 -c 8,9 -o collapse,mean" << endl;
     cerr << "\tchr1 10  20  A   B.1,B.2,    5500" << endl << endl;
+    cerr << "\t$ cat ex1.out | groupBy -g 1,2,3,4 -c 8,9 -o collapse,mean" << endl;
+    cerr << "\tchr1 10  20  A   B.1,B.2,    5500" << endl << endl;
     
     cerr << "Notes: " << endl;
-    cerr << "\t(1)  The input file/stream should be sorted/grouped by the -grp. columns" << endl << endl;
+    cerr << "\t(1)  The input file/stream should be sorted/grouped by the -grp. columns" << endl;
     cerr << "\t(2)  If -i is unspecified, input is assumed to come from stdin." << endl << endl;
 
     

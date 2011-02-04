@@ -3,7 +3,9 @@
 #include <vector>
 #include <algorithm>
 #include <math.h>
-#include <unistd.h> // for
+#include <unistd.h> // for getpid()
+#include "version.h"
+
 using namespace std;
 
 // define our program name
@@ -65,8 +67,9 @@ int main(int argc, char* argv[]) {
 
     vector<string> linesVector;
     linesVector.reserve(1E6);   // allocate 1 mill lines of input.
-    istream *in = &cin;
 
+    // 0. Are we dealing with a stream or a proper file? Default to a stream.
+    istream *in = &cin;
     if (isFile) {
         ifstream *inF = new ifstream(inFile.c_str(), ios::in);
         // ensure that the file can be opened
@@ -109,22 +112,25 @@ int main(int argc, char* argv[]) {
 }
 
 
+
 // show the help
 void ShowHelp(void) {
-    cout << "===============================================================================" << endl;
-    cout << PROGRAM_NAME << ": randomize (shuffle, unsort) input." << endl << endl;
-    cout << "Aaron Quinlan, Ph.D." << endl;
-    cout << "Marth Laboratory" << endl;
-    cout << "Dept. of Biology, Boston College" << endl;
-    cout << "===============================================================================" << endl << endl;
-    cout << "Description: " << PROGRAM_NAME << " randomizes a file or stdin" << endl << endl;
-    cout << "Usage: " << PROGRAM_NAME << " <file (opt.)> [-s <random seed>]" << endl << endl;
-    cout << "Default: " << "By default, " << PROGRAM_NAME << " will use it's own seed to randomize." << endl << endl;
+    
+    cerr << endl << "Program: " << PROGRAM_NAME << " (v" << VERSION << ")" << endl;
+    
+    cerr << "Author:  Aaron Quinlan (aaronquinlan@gmail.com)" << endl;
 
-    cout << "Options:" << endl;
-    cout << "  -s                       Custom seed for randomizing the output." << endl;
-    cout << "\nHelp:" << endl;
-    cout << "  -h                       Shows this help text" << endl;
+    cerr << "Summary: shuffles/randomizes a file or pipe" << endl << endl;
+    
+    cerr << "Usage:\t" << PROGRAM_NAME << " [OPTIONS] [FILE]" << endl;
+    cerr << "\t"      << PROGRAM_NAME << " [OPTIONS] < [FILE]" << endl;
+    cerr << "\t"      << "cat [FILE] | " << PROGRAM_NAME << " [OPTIONS]" << endl << endl;
+
+    cerr << "Options: " << endl;
+    cerr << "\t-s\t"           << "Custom seed for randomizing the output." << endl;
+    cerr                       << "\t\tUses time and process id by default." << endl << endl;    
+    cout << "\t-h\t"         << "Shows this help text" << endl << endl;
+    
 
     // end the program here
     exit(1);
