@@ -3,6 +3,7 @@
 #include <vector>
 #include <algorithm>
 #include <math.h>
+#include <cstring>
 #include <unistd.h> // for getpid()
 #include "version.h"
 
