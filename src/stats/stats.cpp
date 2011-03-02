@@ -1,3 +1,5 @@
+#include <climits>
+#include <cstring>
 #include <iostream>
 #include <fstream>
 #include <iomanip>
