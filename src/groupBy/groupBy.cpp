@@ -184,8 +184,9 @@ int main(int argc, char* argv[]) {
     for( size_t i = 0; i < ops.size(); i++ ) {
         if ((ops[i] != "sum")  && (ops[i] != "max")    && (ops[i] != "min") && (ops[i] != "mean") &&
             (ops[i] != "mode") && (ops[i] != "median") && (ops[i] != "antimode") && (ops[i] != "stdev") &&
-            (ops[i] != "sstdev") && (ops[i] != "count") && (ops[i] != "collapse") && (ops[i] != "freqdesc") &&
-        (ops[i] != "freqasc")) {
+            (ops[i] != "sstdev") && (ops[i] != "count") && (ops[i] != "collapse") && (ops[i] != "concat") &&
+            (ops[i] != "freqdesc") && (ops[i] != "freqasc")) 
+        {
             cerr << endl << "*****" << endl << "*****ERROR: Invalid operation selection \"" << ops[i] << endl << "\"  *****" << endl;
             showHelp = true;
         }
@@ -262,6 +263,7 @@ void ShowHelp(void) {
     cerr                         << "\t\t\t    mean, median, mode, antimode," << endl;
     cerr                         << "\t\t\t    stdev, sstdev (sample standard dev.)," << endl;
     cerr                         << "\t\t\t    collapse (i.e., print a comma separated list), " << endl;
+    cerr                         << "\t\t\t    concat   (i.e., merge values into a single, non-delimited string), " << endl;
     cerr                         << "\t\t\t    freqdesc (i.e., print desc. list of values:freq)" << endl;
     cerr                         << "\t\t\t    freqasc (i.e., print asc. list of values:freq)" << endl;
     cerr                         << "\t\t\t- Default: sum" << endl << endl;
@@ -283,8 +285,8 @@ void ShowHelp(void) {
 
     cerr << "Examples: " << endl;
     cerr << "\t$ cat ex1.out" << endl;
-    cerr << "\tchr1 10  20  A   chr1    15  25  B.1 1000" << endl;
-    cerr << "\tchr1 10  20  A   chr1    25  35  B.2 10000" << endl << endl;
+    cerr << "\tchr1 10  20  A   chr1    15  25  B.1 1000    ATAT" << endl;
+    cerr << "\tchr1 10  20  A   chr1    25  35  B.2 10000   CGCG" << endl << endl;
     cerr << "\t$ groupBy -i ex1.out -g 1,2,3,4 -c 9 -o sum" << endl;
     cerr << "\tchr1 10  20  A   11000" << endl << endl;
     cerr << "\t$ groupBy -i ex1.out -grp 1,2,3,4 -opCols 9,9 -ops sum,max" << endl;
@@ -293,6 +295,8 @@ void ShowHelp(void) {
     cerr << "\tchr1 10  20  A   B.1,B.2,    5500" << endl << endl;
     cerr << "\t$ cat ex1.out | groupBy -g 1,2,3,4 -c 8,9 -o collapse,mean" << endl;
     cerr << "\tchr1 10  20  A   B.1,B.2,    5500" << endl << endl;
+    cerr << "\t$ cat ex1.out | groupBy -g 1,2,3,4 -c 10 -o concat" << endl;
+    cerr << "\tchr1 10  20  A   ATATCGCG" << endl << endl;
 
     cerr << "Notes: " << endl;
     cerr << "\t(1)  The input file/stream should be sorted/grouped by the -grp. columns" << endl;
@@ -426,6 +430,13 @@ void ReportSummary(const vector<string> &group, const vector<vector<string> > &d
                 collapse.append(data[i][j]);
             }
             result.push_back(collapse);
+        }
+        else if (op == "concat") {
+            string concat;
+            for( size_t j = 0; j < data[i].size(); j++ ) {//Ugly, but cannot use back_inserter
+                concat.append(data[i][j]);
+            }
+            result.push_back(concat);
         }
         else if (op == "min") {
             buffer << setprecision (PRECISION) << *min_element( dataF.begin(), dataF.end() );
