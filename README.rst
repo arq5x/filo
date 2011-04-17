@@ -32,6 +32,8 @@ Here is the current list of the available operations.
 9. *antimode* - numeric or text collapse (i.e., print a comma separated list) - numeric or text 
 10. *freqasc* - print a comma separated list of values observed and the number of times they were observed. Reported in **ascending** order of frequency.
 11. *freqdesc* - print a comma separated list of values observed and the number of times they were observed. Reported in descending order of frequency.
+12. *collapse* - print a comma separated list of each value in the grouped column.
+13. *concat* - concattenate each value in the grouped column into a single string.
 
 And here are some usage examples.  I hope you find this utility to be of use in your work.  I have found it to be a huge time saver.
 
