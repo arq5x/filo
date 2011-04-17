@@ -66,7 +66,7 @@ int main(int argc, char* argv[]) {
     long totalLines = 0;
 
     vector<string> linesVector;
-    linesVector.reserve(1E6);   // allocate 1 mill lines of input.
+    linesVector.reserve((int)1E6);   // allocate 1 mill lines of input.
 
     // 0. Are we dealing with a stream or a proper file? Default to a stream.
     istream *in = &cin;
