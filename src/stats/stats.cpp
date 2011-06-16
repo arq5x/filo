@@ -7,6 +7,8 @@
 #include <math.h>
 #include <exception>
 #include <stdexcept> // out_of_range exception
+#include <cstring>
+#include <climits>
 
 #include "version.h"
 #include "lineFileUtilities.h"
