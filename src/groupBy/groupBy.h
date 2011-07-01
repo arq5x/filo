@@ -1,12 +1,12 @@
 /*****************************************************************************
   groupBy.h
 
-  (c) 2009, 2010 - Aaron Quinlan
+  (c) 2009, 2010, 2011 - Aaron Quinlan
   Center for Public Health Genomics
   University of Virginia
   aaronquinlan@gmail.com
 
-  Licenced under the GNU General Public License 2.0 license.
+  Licenced under the MIT license.
 ******************************************************************************/
 
 #ifndef GROUPBY_H

@@ -1,3 +1,13 @@
+/*****************************************************************************
+  stats.cpp
+
+  (c) 2009, 2010, 2011 - Aaron Quinlan
+  Center for Public Health Genomics
+  University of Virginia
+  aaronquinlan@gmail.com
+
+  Licenced under the MIT license.
+******************************************************************************/
 #include <iostream>
 #include <fstream>
 #include <iomanip>
