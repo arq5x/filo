@@ -11,6 +11,7 @@ Licenced under the MIT license.
 #include <vector>
 #include <map>
 #include <numeric>
+#include <algorithm>
 #include <iterator>
 #include <iostream>
 #include <iomanip>
@@ -184,8 +185,8 @@ int main(int argc, char* argv[]) {
     for( size_t i = 0; i < ops.size(); i++ ) {
         if ((ops[i] != "sum")  && (ops[i] != "max")    && (ops[i] != "min") && (ops[i] != "mean") &&
             (ops[i] != "mode") && (ops[i] != "median") && (ops[i] != "antimode") && (ops[i] != "stdev") &&
-            (ops[i] != "sstdev") && (ops[i] != "count") && (ops[i] != "collapse") && (ops[i] != "concat") &&
-            (ops[i] != "freqdesc") && (ops[i] != "freqasc")) 
+            (ops[i] != "sstdev") && (ops[i] != "count") && (ops[i] != "collapse") && (ops[i] != "distinct") &&
+            (ops[i] != "concat") && (ops[i] != "freqdesc") && (ops[i] != "freqasc")) 
         {
             cerr << endl << "*****" << endl << "*****ERROR: Invalid operation selection \"" << ops[i] << endl << "\"  *****" << endl;
             showHelp = true;
@@ -262,7 +263,8 @@ void ShowHelp(void) {
     cerr                         << "\t\t\t    sum, count, min, max," << endl;
     cerr                         << "\t\t\t    mean, median, mode, antimode," << endl;
     cerr                         << "\t\t\t    stdev, sstdev (sample standard dev.)," << endl;
-    cerr                         << "\t\t\t    collapse (i.e., print a comma separated list), " << endl;
+    cerr                         << "\t\t\t    collapse (i.e., print a comma separated list (duplicates allowed)), " << endl;
+    cerr                         << "\t\t\t    distinct (i.e., print a comma separated list (NO duplicates allowed)), " << endl;
     cerr                         << "\t\t\t    concat   (i.e., merge values into a single, non-delimited string), " << endl;
     cerr                         << "\t\t\t    freqdesc (i.e., print desc. list of values:freq)" << endl;
     cerr                         << "\t\t\t    freqasc (i.e., print asc. list of values:freq)" << endl;
@@ -316,7 +318,7 @@ void GroupBy (const string &inFile,
     const bool printOriginalLine,
     const bool printHeaderLine,
     const bool InputHaveHeaderLine,
-const bool ignoreCase) {
+    const bool ignoreCase) {
 
     // current line number
     int lineNum = 0;
@@ -430,6 +432,22 @@ void ReportSummary(const vector<string> &group, const vector<vector<string> > &d
                 collapse.append(data[i][j]);
             }
             result.push_back(collapse);
+        }
+        else if (op == "distinct") {
+            string distinct;
+            // get the current column's data
+            vector<string> col_data = data[i];
+            // remove duplicate entries from the vector
+            // http://stackoverflow.com/questions/1041620/most-efficient-way-to-erase-duplicates-and-sort-a-c-vector
+            sort( col_data.begin(), col_data.end() );
+            col_data.erase( unique( col_data.begin(), col_data.end() ), col_data.end() );
+            
+            for( size_t j = 0; j < col_data.size(); j++ ) {//Ugly, but cannot use back_inserter
+                if (j>0)
+                    distinct.append(",");
+                distinct.append(col_data[j]);
+            }
+            result.push_back(distinct);
         }
         else if (op == "concat") {
             string concat;
