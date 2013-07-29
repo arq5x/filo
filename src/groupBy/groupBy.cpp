@@ -426,12 +426,15 @@ void ReportSummary(const vector<string> &group, const vector<vector<string> > &d
         }
         else if (op == "collapse") {
             string collapse;
-            for( size_t j = 0; j < data[i].size(); j++ ) {//Ugly, but cannot use back_inserter
-                if (j>0)
+            size_t data_size = data[i].size();
+            if (data_size > 0) {
+                for( size_t j = 0; j < data_size - 1; j++ ) {
+                    collapse.append(data[i][j]);
                     collapse.append(",");
-                collapse.append(data[i][j]);
+                }
+                collapse.append(data[i][data_size - 1]);
+                result.push_back(collapse);
             }
-            result.push_back(collapse);
         }
         else if (op == "distinct") {
             string distinct;
