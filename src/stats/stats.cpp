@@ -205,6 +205,9 @@ int main(int argc, char* argv[]) {
     cout << "Total lines:\t\t"  << setprecision (15) << totalLines << endl;
     cout << "Sum of lines:\t\t" << setprecision (15) << sumOfLines << endl;
 
+    if (totalLines < 1) {
+        return 0;
+    }
     if (doMean || doAll) {
         // compute the mean
         mean = sumOfLines / totalLines;
